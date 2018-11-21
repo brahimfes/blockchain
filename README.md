@@ -52,6 +52,7 @@ GET /patients/pid
 ```
 Recherche le patient avec son PID (patient identifier)
 
+Création d'un nouveau patient
 
 ### 2. Resource Observation
 ```
