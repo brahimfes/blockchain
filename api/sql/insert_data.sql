@@ -2,10 +2,11 @@ use sih;
 insert into
     patient(pid, nom, prenom, date_naissance, sexe, adresse)
 values(
-        '5-5544-4444',
-        'toto',
-        'titi',
-        '01/01/2000',
+        '5-5544-4445',
+        'ISKOUNENE',
+        'Lydia',
+        '06/04/1995',
         'F',
-        'new city'
+        'Caen'
     );
+

@@ -23,3 +23,5 @@ CREATE TABLE `sih`.`obx` (
     `result` VARCHAR(45) NULL,
     PRIMARY KEY (`id`)
 );
+
+

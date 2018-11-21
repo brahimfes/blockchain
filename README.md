@@ -7,6 +7,11 @@ Le middleware est composé de différents composants logiciels à savoir :
 2. HL7 Parser : utilisé par la blockchain pour traduire les messages hl7 en objet.
 3. Les microservices (ou `api`) qui represente les services métiers.
 
+##installer le Git:
+https://git-scm.com/download/win
+
+##installer visual studio code:
+https://code.visualstudio.com/docs?dv=win
 
 ## Pré-requis
 1. Installer [Python 3.6+](https://www.python.org/downloads/).
@@ -21,10 +26,19 @@ $ pipenv install
     
 ## Blockchain
 Ajouter plus de contenu (se baser sur le projet de base)
+py -m main.application
 
 ## Parseur HL7
 Le seul parseur compatible avec python 3
 https://python-hl7.readthedocs.io/en/latest/
+
+##Base de données mysql
+installer  https://dev.mysql.com/downloads/file/?id=480823
+installer flask : 
+pip install Flask
+pip install requests
+pip install hl7
+
 
 ## Microservices/API
 
