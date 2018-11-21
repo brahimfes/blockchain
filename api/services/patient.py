@@ -3,6 +3,7 @@ from api.db import MysqlDatabase
 
 db = MysqlDatabase('localhost', 'root', '', 'sih')
 
+
 class PatientService:
 
     def save(self, hl7_message):
