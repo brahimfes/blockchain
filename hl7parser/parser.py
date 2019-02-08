@@ -1,17 +1,20 @@
 import hl7
 from api.models.patient import Patient
 from api.models.observation import Observation
+from api.models.appointment import Appointment
 
 
 class Parser:
     __msg = None
     pid = Patient()
     obx = Observation()
+    sch = Appointment()
 
     def parse(self, hl7_message):
         self.__msg = hl7.parse(hl7_message)
         self.parsePatient()
         self.parseObservation()
+        self.parseAppointment()
 
     def getMessageType(self):
         return str(self.__msg.segment('MSH')[9])
@@ -29,6 +32,9 @@ class Parser:
         self.obx.units = self.__msg.segment('OBX')[6][0]
         self.obx.references_range = self.__msg.segment('OBX')[7][0]
         self.obx.result = self.__msg.segment('OBX')[11][0]
+
+    def parseAppointment(self):
+        self.sch.id = self.__msg.segment('SCH')[1][0]
 
 # print("------------ Patient ----------")
 # print("Patient Identifier:", msgObject.segment('self.pid')[3][0])

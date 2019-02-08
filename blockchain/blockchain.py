@@ -1,18 +1,26 @@
 import hashlib
 from time import time
 import json
+import os.path
 import requests
 from urllib.parse import urlparse
 
 
 class Blockchain:
-    def __init__(self):
+    def __init__(self, path):
         self.current_transactions = []
         self.chain = []
         self.nodes = set()
+        self.path = path
 
         # Create the genesis block
-        self.new_block(previous_hash='1', proof=100)
+        if os.path.isfile(path):
+            with open(path, 'r') as f:
+                self.chain = json.load(f)
+            if len(self.chain) == 0:
+                self.new_block(previous_hash='1', proof=100)
+        else:
+            self.new_block(previous_hash='1', proof=100)
 
     def register_node(self, address):
         """
@@ -115,6 +123,8 @@ class Blockchain:
         self.current_transactions = []
 
         self.chain.append(block)
+        with open(self.path, 'w') as outfile:
+            json.dump(self.chain, outfile)
         return block
 
     def new_transaction(self, message):

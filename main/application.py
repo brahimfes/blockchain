@@ -8,7 +8,7 @@ from api.services.patient import PatientService
 
 app = Flask(__name__)
 node_identifier = str(uuid4()).replace('-', '')
-blockchain = Blockchain()
+blockchain = Blockchain('resources/data.json')
 patientService = PatientService()
 
 @app.route('/mine', methods=['GET'])
@@ -26,7 +26,7 @@ def mine():
         'proof': block['proof'],
         'previous_hash': block['previous_hash'],
     }
-    return jsonify(response), 200
+    return jsonify(response), 200, {'Access-Control-Allow-Origin': '*'} 
 
 @app.route('/transactions', methods=['POST'])
 def new_transaction():
@@ -35,7 +35,7 @@ def new_transaction():
     index = blockchain.new_transaction(message)
     patientService.save(message)
     response = {'message': f'Transaction will be added to Block {index}'}
-    return jsonify(response), 201
+    return jsonify(response), 201, {'Access-Control-Allow-Origin': '*'} 
 
 @app.route('/chain', methods=['GET'])
 def full_chain():

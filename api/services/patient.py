@@ -14,11 +14,16 @@ class PatientService:
         # traiter le message selon son type
         obx = parser.obx
         pid = parser.pid
+        sch = parser.sch
 
         if msg_type == 'ORU^R01':
             query = "insert into obx (set_id, value, units, references_range, result, pid) values('%s', '%s', '%s', '%s', '%s', '%s')" % (obx.set_id, obx.value, obx.units, obx.references_range, obx.result, pid.ip )
             print(query)
-            return db.insert(query)
+            db.insert(query)
+
+            updateAppointmentQuery = "update rendez_vous set etat = 'finalise' where id = '%s'" % sch.id
+            print(updateAppointmentQuery)
+            return db.insert(updateAppointmentQuery)
 
         elif msg_type == 'toto':
             pass
