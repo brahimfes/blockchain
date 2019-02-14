@@ -7,10 +7,10 @@ from urllib.parse import urlparse
 
 
 class Blockchain:
-    def __init__(self, path):
+    def __init__(self, path, config):
         self.current_transactions = []
         self.chain = []
-        self.nodes = set()
+        self.nodes = []
         self.path = path
 
         # Create the genesis block
@@ -22,6 +22,20 @@ class Blockchain:
         else:
             self.new_block(previous_hash='1', proof=100)
 
+        # load configuration
+        nodes = None
+        if os.path.isfile(config):
+            with open(config, 'r') as f:
+                nodes = f.read().splitlines()
+                print("Nodes: ", nodes)
+
+        # registrer loaded nodes
+        if nodes:
+            for node in nodes:
+                print("register_node: ", node)
+                self.register_node(node)
+
+
     def register_node(self, address):
         """
         Add a new node to the list of nodes
@@ -31,10 +45,10 @@ class Blockchain:
 
         parsed_url = urlparse(address)
         if parsed_url.netloc:
-            self.nodes.add(parsed_url.netloc)
+            self.nodes.append(parsed_url.netloc)
         elif parsed_url.path:
             # Accepts an URL without scheme like '192.168.0.5:5000'.
-            self.nodes.add(parsed_url.path)
+            self.nodes.append(parsed_url.path)
         else:
             raise ValueError('Invalid URL')
 
@@ -85,7 +99,7 @@ class Blockchain:
 
         # Grab and verify the chains from all the nodes in our network
         for node in neighbours:
-            response = requests.get(f'http://{node}/chain')
+            response = requests.get(f'https://{node}/chain')
 
             if response.status_code == 200:
                 length = response.json()['length']

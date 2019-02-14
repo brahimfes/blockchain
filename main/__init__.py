@@ -9,14 +9,14 @@ from api.services.patient import PatientService
 
 app = Flask(__name__)
 node_identifier = str(uuid4()).replace('-', '')
-blockchain = Blockchain('resources/data.json')
+blockchain = Blockchain('resources/data.json', 'resources/config.txt')
 patientService = PatientService()
 
 instance = os.environ.get('INSTANCE_NAME', None)
 
 @app.route('/', methods=['GET'])
 def home():
-    return render_template('state.html', instance = instance)
+    return render_template('state.html', instance = instance, blockchain = blockchain)
 
 @app.route('/mine', methods=['GET'])
 def mine():
