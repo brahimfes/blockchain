@@ -1,8 +1,8 @@
 from hl7parser.parser import Parser
 from api.db import MysqlDatabase
 
-db = MysqlDatabase('localhost', 'root', '', 'sih')
-
+#db = MysqlDatabase('localhost', 'root', '', 'sih')
+db = MysqlDatabase('u615qyjzybll9lrm.chr7pe7iynqr.eu-west-1.rds.amazonaws.com', 'znrv09cif9r6878k', 'besy5nu30n3u1hrh', 'ffl0zhvdujs4a0wc')
 
 class PatientService:
 

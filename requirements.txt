@@ -1,3 +1,16 @@
-flask==0.12.2
+certifi==2018.11.29
+chardet==3.0.4
+Click==7.0
+Flask==1.0.2
+gunicorn==19.9.0
+hl7==0.3.4
+idna==2.6
+itsdangerous==1.1.0
+Jinja2==2.10
+MarkupSafe==1.1.0
+mysql-connector-python==8.0.14
+protobuf==3.6.1
 requests==2.18.4
-mysql-connector-python == 8.0.13
+six==1.12.0
+urllib3==1.22
+Werkzeug==0.14.1

@@ -11,6 +11,11 @@ node_identifier = str(uuid4()).replace('-', '')
 blockchain = Blockchain('resources/data.json')
 patientService = PatientService()
 
+@app.route('/', methods=['GET'])
+def status():
+    response = '<h1>Welcome to SIP middleware</h1>'
+    return response, 200, {'Access-Control-Allow-Origin': '*'}
+
 @app.route('/mine', methods=['GET'])
 def mine():
     last_block = blockchain.last_block
