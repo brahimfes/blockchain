@@ -2,7 +2,7 @@ import json
 from urllib.parse import urlparse
 from uuid import uuid4
 import os
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, render_template
 
 from blockchain.blockchain import Blockchain
 from api.services.patient import PatientService
@@ -16,8 +16,7 @@ instance = os.environ.get('INSTANCE_NAME', None)
 
 @app.route('/', methods=['GET'])
 def home():
-    response = '<h1>Welcome to sip middleware</h1><h2>%s</h2>' % instance
-    return response, 200, {'Access-Control-Allow-Origin': '*'}
+    return render_template('state.html', instance = instance)
 
 @app.route('/mine', methods=['GET'])
 def mine():
