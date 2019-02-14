@@ -1,3 +1,2 @@
 middleware-its-slave-1.herokuapp.com
 middleware-its-slave-2.herokuapp.com
-middleware-its-slave-3.herokuapp.com
