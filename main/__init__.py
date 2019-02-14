@@ -14,9 +14,17 @@ patientService = PatientService()
 
 instance = os.environ.get('INSTANCE_NAME', None)
 
+
 @app.route('/', methods=['GET'])
 def home():
     return render_template('state.html', instance = instance, blockchain = blockchain)
+
+@app.route('/status', methods=['GET'])
+def status():
+    response = {
+        "result": "OK",
+    }
+    return jsonify(response), 200, {'Access-Control-Allow-Origin': '*'} 
 
 @app.route('/mine', methods=['GET'])
 def mine():

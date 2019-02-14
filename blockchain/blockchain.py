@@ -149,7 +149,7 @@ class Blockchain:
         :return: The index of the Block that will hold this transaction
         """
         self.current_transactions.append({
-            'message': message,
+            'message': message
         })
 
         return self.last_block['index'] + 1

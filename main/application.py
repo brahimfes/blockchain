@@ -1,20 +1,30 @@
 import json
 from urllib.parse import urlparse
 from uuid import uuid4
-from flask import Flask, jsonify, request
+import os
+from flask import Flask, jsonify, request, render_template
 
 from blockchain.blockchain import Blockchain
 from api.services.patient import PatientService
 
 app = Flask(__name__)
 node_identifier = str(uuid4()).replace('-', '')
-blockchain = Blockchain('resources/data.json')
+blockchain = Blockchain('resources/data.json', 'resources/config.txt')
 patientService = PatientService()
 
+instance = os.environ.get('INSTANCE_NAME', None)
+
+
 @app.route('/', methods=['GET'])
+def home():
+    return render_template('state.html', instance = instance, blockchain = blockchain)
+
+@app.route('/status', methods=['GET'])
 def status():
-    response = '<h1>Welcome to SIP middleware</h1>'
-    return response, 200, {'Access-Control-Allow-Origin': '*'}
+    response = {
+        "result": "OK",
+    }
+    return jsonify(response), 200, {'Access-Control-Allow-Origin': '*'} 
 
 @app.route('/mine', methods=['GET'])
 def mine():
