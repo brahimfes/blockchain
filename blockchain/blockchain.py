@@ -2,6 +2,7 @@ import hashlib
 from time import time
 import json
 import os.path
+import datetime
 import requests
 from urllib.parse import urlparse
 
@@ -127,7 +128,7 @@ class Blockchain:
 
         block = {
             'index': len(self.chain) + 1,
-            'timestamp': time(),
+            'timestamp': datetime.datetime.now().strftime("%d-%m-%Y %H:%M"),
             'transactions': self.current_transactions,
             'proof': proof,
             'previous_hash': previous_hash or self.hash(self.chain[-1]),
