@@ -49,6 +49,13 @@ def new_transaction():
     message = message.replace("\r\n", "\r").replace("\n", "\r")
     index = blockchain.new_transaction(message)
     patientService.save(message)
+    
+    #mine after new transaction
+    last_block = blockchain.last_block
+    proof = blockchain.proof_of_work(last_block)
+    previous_hash = blockchain.hash(last_block)
+    blockchain.new_block(proof, previous_hash)
+
     response = {'message': f'Transaction will be added to Block {index}'}
     return jsonify(response), 201, {'Access-Control-Allow-Origin': '*'} 
 
