@@ -3,11 +3,16 @@ from urllib.parse import urlparse
 from uuid import uuid4
 import os
 from flask import Flask, jsonify, request, render_template
+from db import MysqlDatabase
 
 from blockchain.blockchain import Blockchain
 from api.services.patient import PatientService
 
+from api.patientAPI import patient_api
 app = Flask(__name__)
+
+app.register_blueprint(patient_api)
+
 node_identifier = str(uuid4()).replace('-', '')
 blockchain = Blockchain('resources/data.json', 'resources/config.txt')
 patientService = PatientService()
@@ -56,7 +61,7 @@ def new_transaction():
     previous_hash = blockchain.hash(last_block)
     blockchain.new_block(proof, previous_hash)
 
-    response = {'message': f'Transaction will be added to Block {index}'}
+    response = {'message': 'Transaction will be added to Block %s' % index}
     return jsonify(response), 201, {'Access-Control-Allow-Origin': '*'} 
 
 @app.route('/chain', methods=['GET'])
