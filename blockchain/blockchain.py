@@ -5,22 +5,59 @@ import os.path
 import datetime
 import requests
 from urllib.parse import urlparse
+import boto3
+import botocore
 
+import cloudinary.uploader
+from urllib.request import urlopen
+from urllib.error import URLError
+
+cloudinary.config( 
+  cloud_name = "dqp6vrabj", 
+  api_key = "317375665231954", 
+  api_secret = "MATdVdcrC1ddK0ZGaoG-Vz6NjuU" 
+)
 
 class Blockchain:
-    def __init__(self, path, config):
+
+    def __init__(self, config):
         self.current_transactions = []
         self.chain = []
         self.nodes = []
-        self.path = path
+        
+        self.bucket_name = 'its2019'
+        self.key_object = 'data.json'
+
+        self.s3 = boto3.resource(
+            's3',
+            aws_access_key_id='AKIAWFD52SAVQ2BZIU6Q',
+            aws_secret_access_key='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',
+        )
+
+        cloudinary.config( 
+            cloud_name = "dqp6vrabj", 
+            api_key = "317375665231954", 
+            api_secret = "MATdVdcrC1ddK0ZGaoG-Vz6NjuU" 
+        )
+
 
         # Create the genesis block
-        if os.path.isfile(path):
-            with open(path, 'r') as f:
-                self.chain = json.load(f)
+        # try:
+        #     obj = self.s3.Object(self.bucket_name, self.key_object)
+        #     data = obj.get()['Body'].read()
+        #     self.chain = json.loads(data)
+        #     if len(self.chain) == 0:
+        #         self.new_block(previous_hash='1', proof=100)
+        # except botocore.exceptions.ClientError as e:
+        #     self.new_block(previous_hash='1', proof=100)
+
+        try:
+            response = urlopen('http://res.cloudinary.com/dqp6vrabj/raw/upload/v1557140356/blockchain.json')
+            data = response.read()
+            self.chain = json.loads(data)
             if len(self.chain) == 0:
                 self.new_block(previous_hash='1', proof=100)
-        else:
+        except URLError as e:
             self.new_block(previous_hash='1', proof=100)
 
         # load configuration
@@ -138,8 +175,15 @@ class Blockchain:
         self.current_transactions = []
 
         self.chain.append(block)
-        with open(self.path, 'w') as outfile:
-            json.dump(self.chain, outfile)
+        with open('resources/mydata.json', 'w') as file:
+            file.write(json.dumps(self.chain))
+        cloudinary.uploader.upload(
+            'resources/mydata.json', 
+            public_id = "blockchain",
+            resource_type = "raw"
+        )
+        #self.s3.Bucket(self.bucket_name).put_object(Key=self.key_object, Body=json.dumps(self.chain))
+
         return block
 
     def new_transaction(self, message):

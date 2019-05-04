@@ -13,7 +13,7 @@ app = Flask(__name__)
 app.register_blueprint(patient_api)
 
 node_identifier = str(uuid4()).replace('-', '')
-blockchain = Blockchain('resources/data.json', 'resources/config.txt')
+blockchain = Blockchain('resources/config.txt')
 patientService = PatientService()
 
 instance = os.environ.get('INSTANCE_NAME', None)
