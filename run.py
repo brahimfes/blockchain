@@ -1,12 +1,14 @@
 import requests
+import datetime
 
-host = "https://middleware-its.herokuapp.com"
+#host = "https://middleware-its.herokuapp.com"
+host = "http://localhost:8000"
 
 def listeDesPatients():
     url = "%s/patients" % (host)
     response = requests.request("GET", url)
     print(response.text)
-    
+
 
 def recherchePatient():
     pid = "555444444"
@@ -28,7 +30,7 @@ def listeDesResultatsPatient():
 
 def ajouterPatient():
     message = "MSH|^~\&|ITS Tablette||ITS Middleware||20160102101112||ADT^A28|ABC0000000001|P|2.4\n"
-    message = message + "PID|||500000||touati^^talal^^||19700101|M|||^101, Jean Jaures^Vitry^^^||||||||||||||||||||\n"
+    message = message + "PID|||332222333||touati^^talal^^||19700101|M|||^101, Jean Jaures^Vitry^^^||||||||||||||||||||\n"
 
     api_url = '%s/transactions' % (host)
 
@@ -89,7 +91,7 @@ def ajouterValise():
 
     body = {
         'checkout': 'test',
-        'date': '12/01/2019'
+        'date': str(datetime.datetime.now())
     }
 
     response = requests.post(
@@ -109,7 +111,7 @@ def listeDesValises():
 #rendezVousPatient()
 #listeDesResultatsPatient()
 #ajouterObservation()
-#ajouterPatient()
+ajouterPatient()
 #nouveauRendezVous()
 #ajouterValise()
-listeDesValises()
+#listeDesValises()

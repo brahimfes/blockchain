@@ -13,7 +13,9 @@ def upload():
   result = cloudinary.uploader.upload("resources/blockchain.json", 
     public_id = "blockchain",
     overwrite = 'true',
+    use_filename = 'true',
     resource_type = "raw")
+  print(result)
   print(result['url'])
 
 
@@ -25,4 +27,8 @@ def download():
   except URLError as e:
       print("erreur")
 
-download()
+def download2():
+  result = cloudinary.utils.cloudinary_url('blockchain.json')
+  print(str(result))
+
+upload()

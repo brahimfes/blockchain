@@ -31,4 +31,11 @@ CREATE TABLE `sih`.`valise` (
     PRIMARY KEY (`id`)
 );
 
+CREATE TABLE `sih`.`blockchain` (
+    `id` BIGINT NOT NULL AUTO_INCREMENT,
+    `version` VARCHAR(45) NOT NULL,
+    `date` TIMESTAMP NOT NULL,
+    PRIMARY KEY (`id`)
+);
+
 

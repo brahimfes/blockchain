@@ -8,15 +8,25 @@ from urllib.parse import urlparse
 import boto3
 import botocore
 
+import calendar;
+import time;
+
 import cloudinary.uploader
 from urllib.request import urlopen
 from urllib.error import URLError
+from api.db import MysqlDatabase
+
+db = MysqlDatabase('u615qyjzybll9lrm.chr7pe7iynqr.eu-west-1.rds.amazonaws.com', 'znrv09cif9r6878k', 'besy5nu30n3u1hrh', 'ffl0zhvdujs4a0wc')
 
 cloudinary.config( 
   cloud_name = "dqp6vrabj", 
   api_key = "317375665231954", 
   api_secret = "MATdVdcrC1ddK0ZGaoG-Vz6NjuU" 
 )
+
+def myconverter(o):
+    if isinstance(o, datetime.datetime):
+        return o.__str__()
 
 class Blockchain:
 
@@ -52,7 +62,11 @@ class Blockchain:
         #     self.new_block(previous_hash='1', proof=100)
 
         try:
-            response = urlopen('http://res.cloudinary.com/dqp6vrabj/raw/upload/v1557190840/blockchain.json')
+            result = db.execute('select * from blockchain where id in (select max(id) from blockchain)')
+            json_data = json.loads(result)
+            lastVersionUrl = json_data[0]['version']
+            print("last version %s" % json_data[0])
+            response = urlopen(lastVersionUrl)
             data = response.read()
             self.chain = json.loads(data)
             if len(self.chain) == 0:
@@ -177,11 +191,17 @@ class Blockchain:
         self.chain.append(block)
         with open('resources/mydata.json', 'w') as file:
             file.write(json.dumps(self.chain))
-        cloudinary.uploader.upload(
+        last = cloudinary.uploader.upload(
             'resources/mydata.json', 
             public_id = "blockchain.json",
             resource_type = "raw"
         )
+        print(last)
+        ts = calendar.timegm(time.gmtime())
+        print(ts)
+        query = "insert into blockchain (version, date) values('%s', %s)" % (last['url'], ts)
+        print(query)
+        db.insert(query)
         #self.s3.Bucket(self.bucket_name).put_object(Key=self.key_object, Body=json.dumps(self.chain))
 
         return block

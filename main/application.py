@@ -3,7 +3,6 @@ from urllib.parse import urlparse
 from uuid import uuid4
 import os
 from flask import Flask, jsonify, request, render_template
-from db import MysqlDatabase
 
 from blockchain.blockchain import Blockchain
 from api.services.patient import PatientService
@@ -14,7 +13,7 @@ app = Flask(__name__)
 app.register_blueprint(patient_api)
 
 node_identifier = str(uuid4()).replace('-', '')
-blockchain = Blockchain('resources/data.json', 'resources/config.txt')
+blockchain = Blockchain('resources/config.txt')
 patientService = PatientService()
 
 instance = os.environ.get('INSTANCE_NAME', None)
@@ -50,19 +49,23 @@ def mine():
 
 @app.route('/transactions', methods=['POST'])
 def new_transaction():
-    message = request.get_data(as_text=True)
-    message = message.replace("\r\n", "\r").replace("\n", "\r")
-    index = blockchain.new_transaction(message)
-    patientService.save(message)
-    
-    #mine after new transaction
-    last_block = blockchain.last_block
-    proof = blockchain.proof_of_work(last_block)
-    previous_hash = blockchain.hash(last_block)
-    blockchain.new_block(proof, previous_hash)
 
-    response = {'message': 'Transaction will be added to Block %s' % index}
-    return jsonify(response), 201, {'Access-Control-Allow-Origin': '*'} 
+
+    try:
+        message = request.get_data(as_text=True)
+        message = message.replace("\r\n", "\r").replace("\n", "\r")
+        index = blockchain.new_transaction(message)
+        patientService.save(message)
+        #mine after new transaction
+        last_block = blockchain.last_block
+        proof = blockchain.proof_of_work(last_block)
+        previous_hash = blockchain.hash(last_block)
+        blockchain.new_block(proof, previous_hash)
+        response = {'message': 'Transaction will be added to Block %s' % index}
+        return jsonify(response), 201, {'Access-Control-Allow-Origin': '*'} 
+    except Exception as e:
+        response = {'message': str(e)}
+        return jsonify(response), 500, {'Access-Control-Allow-Origin': '*'} 
 
 @app.route('/chain', methods=['GET'])
 def full_chain():
