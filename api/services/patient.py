@@ -15,6 +15,7 @@ class PatientService:
         obx = parser.obx
         pid = parser.pid
         sch = parser.sch
+        aip = parser.aip
 
         if msg_type == 'ORU^R01':
             query = "insert into obx (set_id, value, units, references_range, result, pid) values('%s', '%s', '%s', '%s', '%s', '%s')" % (obx.set_id, obx.value, obx.units, obx.references_range, obx.result, pid.ip )
@@ -25,7 +26,15 @@ class PatientService:
             print(updateAppointmentQuery)
             return db.insert(updateAppointmentQuery)
 
-        elif msg_type == 'toto':
-            pass
+        elif msg_type == 'ADT^A28':
+            query = "insert into patient(pid, nom, prenom, date_naissance, sexe, adresse) values('%s', '%s', '%s', '%s', '%s', '%s')" % (pid.ip, pid.nom, pid.prenom, pid.date_naissance, pid.sexe, pid.adresse)
+            print(query)
+            db.insert(query)
+
+        elif msg_type == 'SIU^S12':
+            query = "insert into rendez_vous(pid, nom_du_medecin, dates, agenda, acte) values('%s', '%s', '%s', '%s', '%s')" % (pid.ip, aip.nom, sch.date_debut, sch.agenda, sch.acte)
+            print(query)
+            db.insert(query)
+
         else:
             print('Désolé ! votre message n\'est pas reconnu par notre API')

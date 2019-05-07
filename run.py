@@ -1,7 +1,7 @@
 import requests
 
-host = "http://localhost:8000"
-#host = "https://middleware-its.herokuapp.com"
+#host = "http://localhost:8000"
+host = "https://middleware-its.herokuapp.com"
 
 def listeDesPatients():
     url = "%s/patients" % (host)
@@ -26,7 +26,22 @@ def listeDesResultatsPatient():
     response = requests.request("GET", url)
     print(response.text)
 
-def prendreRDV():
+def ajouterPatient():
+    message = "MSH|^~\&|ITS Tablette||ITS Middleware||20160102101112||ADT^A28|ABC0000000001|P|2.4\n"
+    message = message + "PID|||300000||Baghdadi^^Mehdi^^||19700101|M|||^101, Jean Jaures^Vitry^^^||||||||||||||||||||\n"
+
+    api_url = '%s/transactions' % (host)
+
+    response = requests.post(
+        url=api_url, 
+        data=message,
+        headers={'Content-Type': 'text/plain'}
+    )
+
+    print('%s, %s' % (response.status_code, response.text))
+
+
+def ajouterObservation():
     pid = '222'
     nom_du_patient = 'toto'
     nom_du_medecin = 'titi'
@@ -47,12 +62,33 @@ def prendreRDV():
         data=message,
         headers={'Content-Type': 'text/plain'}
     )
-
     print(response.text)
 
+def nouveauRendezVous():
+    agenda = 'Prise constante'
+    acte = 'ecg'
+    dateRendezVous = '201411201231'
+    dateFinRendezVous = '201411201232'
+    nom_du_medecin = '^Jones^Stuart^James^^Dr'
+
+    message = 'MSH|^~\&|app|sender|HL7API|PKB|201303080949||SIU^S12|ABC0000000001|P|2.4\n'
+    message = message + 'PID|||5555555555||Smith^John^Joe^^Mr||19700101|M|||My flat name^1, The Road^London^London^SW1A 1AA^GBR||john.smith@hotmail.com^NET~01234567890^PRN~07123456789^PRS|john.smith@company.com^NET~01234098765^WPN||||||||||||||||N|\n'
+    message = message + 'SCH|ID000||||||^Prise constante^ECG||||^^^201411201231^201411201232|||||||||||||||\n'
+    message = message + 'AIP|||^Jones^^James^^Dr|^Doctor\n'
+
+    api_url = '%s/transactions' % (host)
+
+    response = requests.post(
+        url=api_url, 
+        data=message,
+        headers={'Content-Type': 'text/plain'}
+    )
+    print(response.text)    
 
 #listPatients()
 #recherchePatient()
 #rendezVousPatient()
 #listeDesResultatsPatient()
-prendreRDV()
+#ajouterObservation()
+ajouterPatient()
+#nouveauRendezVous()

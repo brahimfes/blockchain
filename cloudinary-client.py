@@ -9,15 +9,20 @@ cloudinary.config(
   api_secret = "MATdVdcrC1ddK0ZGaoG-Vz6NjuU" 
 )
 
+def upload():
+  result = cloudinary.uploader.upload("resources/blockchain.json", 
+    public_id = "blockchain",
+    overwrite = 'true',
+    resource_type = "raw")
+  print(result['url'])
 
-result = cloudinary.uploader.upload("resources/data.json", 
-  public_id = "blockchain",
-  overwrite = 'true',
-  resource_type = "raw")
 
-print(result['url'])
-try:
-    response = urlopen('http://res.cloudinary.com/dqp6vrabj/raw/upload/v1557140356/blockchain.json')
-    data = response.read()
-except URLError as e:
-    print("erreur")
+def download():
+  try:
+      response = urlopen('http://res.cloudinary.com/dqp6vrabj/raw/upload/v1557190840/blockchain.json')
+      data = response.read()
+      print(data)
+  except URLError as e:
+      print("erreur")
+
+download()

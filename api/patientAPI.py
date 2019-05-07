@@ -30,3 +30,9 @@ def getResults(pid):
     select = "SELECT * FROM obx where pid like '%s'" % pid
     result = db.execute(query=select)
     return result
+
+@patient_api.route('/patients/<pid>/reports', methods=['GET'])
+def getReports(pid):
+    select = "SELECT * FROM rapport where pid like '%s'" % pid
+    result = db.execute(query=select)
+    return result

@@ -49,19 +49,23 @@ def mine():
 
 @app.route('/transactions', methods=['POST'])
 def new_transaction():
-    message = request.get_data(as_text=True)
-    message = message.replace("\r\n", "\r").replace("\n", "\r")
-    index = blockchain.new_transaction(message)
-    patientService.save(message)
-    
-    #mine after new transaction
-    last_block = blockchain.last_block
-    proof = blockchain.proof_of_work(last_block)
-    previous_hash = blockchain.hash(last_block)
-    blockchain.new_block(proof, previous_hash)
 
-    response = {'message': 'Transaction will be added to Block %s' % index}
-    return jsonify(response), 201, {'Access-Control-Allow-Origin': '*'} 
+
+    try:
+        message = request.get_data(as_text=True)
+        message = message.replace("\r\n", "\r").replace("\n", "\r")
+        index = blockchain.new_transaction(message)
+        patientService.save(message)
+        #mine after new transaction
+        last_block = blockchain.last_block
+        proof = blockchain.proof_of_work(last_block)
+        previous_hash = blockchain.hash(last_block)
+        blockchain.new_block(proof, previous_hash)
+        response = {'message': 'Transaction will be added to Block %s' % index}
+        return jsonify(response), 201, {'Access-Control-Allow-Origin': '*'} 
+    except Exception as e:
+        response = {'message': str(e)}
+        return jsonify(response), 500, {'Access-Control-Allow-Origin': '*'} 
 
 @app.route('/chain', methods=['GET'])
 def full_chain():

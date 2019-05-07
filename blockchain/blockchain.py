@@ -25,20 +25,20 @@ class Blockchain:
         self.chain = []
         self.nodes = []
         
-        self.bucket_name = 'its2019'
-        self.key_object = 'data.json'
+        # self.bucket_name = 'its2019'
+        # self.key_object = 'data.json'
 
-        self.s3 = boto3.resource(
-            's3',
-            aws_access_key_id='AKIAWFD52SAVQ2BZIU6Q',
-            aws_secret_access_key='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',
-        )
+        # self.s3 = boto3.resource(
+        #     's3',
+        #     aws_access_key_id='AKIAWFD52SAVQ2BZIU6Q',
+        #     aws_secret_access_key='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',
+        # )
 
-        cloudinary.config( 
-            cloud_name = "dqp6vrabj", 
-            api_key = "317375665231954", 
-            api_secret = "MATdVdcrC1ddK0ZGaoG-Vz6NjuU" 
-        )
+        # cloudinary.config( 
+        #     cloud_name = "dqp6vrabj", 
+        #     api_key = "317375665231954", 
+        #     api_secret = "MATdVdcrC1ddK0ZGaoG-Vz6NjuU" 
+        # )
 
 
         # Create the genesis block
@@ -52,7 +52,7 @@ class Blockchain:
         #     self.new_block(previous_hash='1', proof=100)
 
         try:
-            response = urlopen('http://res.cloudinary.com/dqp6vrabj/raw/upload/v1557140356/blockchain.json')
+            response = urlopen('http://res.cloudinary.com/dqp6vrabj/raw/upload/v1557190840/blockchain.json')
             data = response.read()
             self.chain = json.loads(data)
             if len(self.chain) == 0:
@@ -179,7 +179,7 @@ class Blockchain:
             file.write(json.dumps(self.chain))
         cloudinary.uploader.upload(
             'resources/mydata.json', 
-            public_id = "blockchain",
+            public_id = "blockchain.json",
             resource_type = "raw"
         )
         #self.s3.Bucket(self.bucket_name).put_object(Key=self.key_object, Body=json.dumps(self.chain))
