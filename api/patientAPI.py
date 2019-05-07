@@ -1,4 +1,4 @@
-from flask import Flask, Blueprint
+from flask import Flask, Blueprint, request
 from .db import MysqlDatabase
 
 patient_api = Blueprint("patient_api", __name__)
@@ -36,3 +36,16 @@ def getReports(pid):
     select = "SELECT * FROM rapport where pid like '%s'" % pid
     result = db.execute(query=select)
     return result
+
+@patient_api.route('/valises', methods=['GET'])
+def getValises():
+    select = "SELECT * FROM valise"
+    result = db.execute(query=select)
+    return result
+
+@patient_api.route('/valises', methods=['POST'])
+def ajouterValise():
+    body = request.get_json()
+    select = "insert into valise(checkout, date) values('%s', '%s')" % (body['checkout'], body['date'])
+    result = db.insert(query=select)
+    return 'OK'

@@ -24,4 +24,11 @@ CREATE TABLE `sih`.`obx` (
     PRIMARY KEY (`id`)
 );
 
+CREATE TABLE `sih`.`valise` (
+    `id` BIGINT NOT NULL AUTO_INCREMENT,
+    `checkout` VARCHAR(45) NOT NULL,
+    `date` VARCHAR(45) NOT NULL,
+    PRIMARY KEY (`id`)
+);
+
 
