@@ -1,8 +1,8 @@
 import requests
 import datetime
+from requests.auth import HTTPBasicAuth
 
-#host = "https://middleware-its.herokuapp.com"
-host = "http://localhost:8000"
+host = "https://middleware-its.herokuapp.com"
 
 def listeDesPatients():
     url = "%s/patients" % (host)
@@ -106,12 +106,43 @@ def listeDesValises():
     response = requests.request("GET", api_url)
     print(response.text)
 
+def login():
+    api_url = '%s/users' % (host)
+    response = requests.request("GET", api_url, auth=HTTPBasicAuth('Mouna', 'secret'))
+    print(response.text)
+    
+def ajouterRapport():
+    pid = "555444451"
+    api_url = '%s/patients/%s/rapports' % (host, pid)
+    body = {
+        'contenu': 'blabla des medecins',
+        'date': str(datetime.datetime.now())
+    }
+    
+    response = requests.post(
+        url = api_url, 
+        json = body,
+        headers = {'Content-Type': 'application/json'},
+        auth = HTTPBasicAuth('Mouna', 'secret')
+    )
+
+    print(response.text)
+
+def listeDesRapports():
+    pid = "555444451"
+    api_url = '%s/patients/%s/rapports' % (host, pid)
+    response = requests.request("GET", api_url)
+    print(response.text)
+
 #listPatients()
 #recherchePatient()
 #rendezVousPatient()
 #listeDesResultatsPatient()
 #ajouterObservation()
-ajouterPatient()
+#ajouterPatient()
 #nouveauRendezVous()
 #ajouterValise()
 #listeDesValises()
+#login()
+#ajouterRapport()
+listeDesRapports()

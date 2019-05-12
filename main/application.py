@@ -8,9 +8,12 @@ from blockchain.blockchain import Blockchain
 from api.services.patient import PatientService
 
 from api.patientAPI import patient_api
+from api.userAPI import user_api
+
 app = Flask(__name__)
 
 app.register_blueprint(patient_api)
+app.register_blueprint(user_api)
 
 node_identifier = str(uuid4()).replace('-', '')
 blockchain = Blockchain('resources/config.txt')

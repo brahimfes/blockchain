@@ -1,5 +1,6 @@
 from flask import Flask, Blueprint, request
 from .db import MysqlDatabase
+from api.auth import check_auth, authenticate, requires_auth
 
 patient_api = Blueprint("patient_api", __name__)
 
@@ -49,3 +50,19 @@ def ajouterValise():
     select = "insert into valise(checkout, date) values('%s', '%s')" % (body['checkout'], body['date'])
     result = db.insert(query=select)
     return 'OK'
+
+@patient_api.route('/patients/<pid>/rapports', methods=['POST'])
+@requires_auth
+def ajouterRapport(pid):
+    auth = request.authorization
+    print(auth)
+    body = request.get_json()
+    select = "insert into rapport(contenu, pid, date, user) values('%s', '%s', '%s', '%s')" % (body['contenu'], pid, body['date'], auth.username)
+    result = db.insert(query=select)
+    return 'OK'
+
+@patient_api.route('/patients/<pid>/rapports', methods=['GET'])
+def listeRapports(pid):
+    select = "select * from rapport where pid like '%s'" % pid
+    result = db.execute(query=select)
+    return result

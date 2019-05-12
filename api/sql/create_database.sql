@@ -38,4 +38,13 @@ CREATE TABLE `sih`.`blockchain` (
     PRIMARY KEY (`id`)
 );
 
+CREATE TABLE `sih`.`rapport` (
+    `id` BIGINT NOT NULL AUTO_INCREMENT,
+    `content` TEXT NOT NULL,
+    `pid` VARCHAR(45) NOT NULL,
+    `date` TIMESTAMP NOT NULL,
+    `user` BIGINT NOT NULL,
+    PRIMARY KEY (`id`)
+);
+
 
