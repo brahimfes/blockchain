@@ -14,3 +14,11 @@ def checkUser():
     select = "SELECT id, pseudo, mail FROM user where pseudo like '%s'" % auth.username
     result = db.execute(query=select)
     return result
+
+@user_api.route('/users/biometry', methods=['POST'])
+def checkUserByBio():
+    body = request.get_json()
+    print(body)
+    select = "SELECT id, pseudo, mail FROM user where biometry like '%s'" % body['biometry']
+    result = db.execute(query=select)
+    return result

@@ -110,12 +110,31 @@ def login():
     api_url = '%s/users' % (host)
     response = requests.request("GET", api_url, auth=HTTPBasicAuth('Mouna', 'secret'))
     print(response.text)
+
+def recupererUserParBiometry():
+    api_url = '%s/users/biometry' % (host)
+    body = {
+        'biometry': '1234',
+    }
     
-def ajouterRapport():
+    response = requests.post(
+        url = api_url, 
+        json = body,
+        headers = {'Content-Type': 'application/json'}
+    )
+
+    print(response.text)
+
+def loginByBiometry():
+    api_url = '%s/users' % (host)
+    response = requests.request("GET", api_url, auth=HTTPBasicAuth('rachid', 'bio:1234'))
+    print(response.text)
+
+def ajouterRapportByBiometry():
     pid = "555444451"
     api_url = '%s/patients/%s/rapports' % (host, pid)
     body = {
-        'contenu': 'blabla des medecins',
+        'contenu': 'contenu du rapport de test',
         'date': str(datetime.datetime.now())
     }
     
@@ -123,7 +142,24 @@ def ajouterRapport():
         url = api_url, 
         json = body,
         headers = {'Content-Type': 'application/json'},
-        auth = HTTPBasicAuth('Mouna', 'secret')
+        auth = HTTPBasicAuth('rachid', 'bio:1234')
+    )
+
+    print(response.text)
+    
+def ajouterRapport():
+    pid = "555444451"
+    api_url = '%s/patients/%s/rapports' % (host, pid)
+    body = {
+        'contenu': 'contenu du rapport de test',
+        'date': str(datetime.datetime.now())
+    }
+    
+    response = requests.post(
+        url = api_url, 
+        json = body,
+        headers = {'Content-Type': 'application/json'},
+        auth = HTTPBasicAuth('ASLAN', 'secret')
     )
 
     print(response.text)
@@ -144,5 +180,8 @@ def listeDesRapports():
 #ajouterValise()
 #listeDesValises()
 #login()
+recupererUserParBiometry()
+ajouterRapportByBiometry()
+#loginByBiometry()
 #ajouterRapport()
-listeDesRapports()
+#listeDesRapports()

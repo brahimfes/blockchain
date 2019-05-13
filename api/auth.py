@@ -16,8 +16,11 @@ def check_auth(username, password):
     users = json.loads(result)
     
     if(len(users) > 0):
-        print(users)
-        return verify(users[0]['password'], password)
+        items = password.split(":")
+        if len(items) > 0 and items[0] == "bio":
+            return users[0]['biometry'] == items[1]
+        else:
+            return verify(users[0]['password'], password)
     else:
         return False
 
